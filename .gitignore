@@ -1,0 +1,5 @@
+dane/
+excel_reports/
+__pycache__/
+.env
+.ipynb_checkpoints/
