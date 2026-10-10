@@ -7,20 +7,22 @@ Dane pochodzą z serwisu Kaggle (*Credit Risk Dataset*) i zawierają historyczne
 
 ## Wykorzystane Technologie
 * **Baza danych:** PostgreSQL (DBeaver)
-* **Języki:** SQL, (Python, Power BI, Excel Power Query) - w planach
+* **Języki:** SQL, Python, (Power BI, Excel Power Query) - w planach
 
 ## Struktura Repozytorium (Stan Obecny)
 ```text
 credit-risk-analysis/
 ├── dane/
 │   ├── surowe_dane/               
-│   │   └── credit_risk_dataset.csv  # Surowe dane pobrane z Kaggle
-│   └── przetworzone_dane/            
+│   │   └── credit_risk_dataset.csv           # Surowe dane pobrane z Kaggle
+│   └── przetworzone_dane/
+│        └── credit_risk_dataset_cleaned.csv  # Oczyszczone dane     
 ├── dashboard/
 ├── notebooks/
+│   └── 01_data_cleaning.ipynb                # Oczyszczanie zbioru danych z błedów
 ├── sql/
-│   ├── 01_create_tables.sql         # Skrypt tworzący schemat bazy danych
-│   └── 02_analysis_queries.sql      # Zapytania analityczne
+│   ├── 01_create_tables.sql                  # Skrypt tworzący schemat bazy danych
+│   └── 02_analysis_queries.sql               # Zapytania analityczne
 ├── .env                           
 ├── .gitignore
 ├── requirements.txt               
@@ -48,3 +50,18 @@ W pierwszym etapie utworzono lokalną bazę danych (skrypt `01_create_table.sql`
 * **Najbardziej toksyczne segmenty:** Największe kwoty utopiono w pożyczkach medycznych i konsolidacyjnych dla najemców (łącznie **22,6 mln USD** straty). Z kolei najwyższy odsetek dłużników to najemcy pożyczający na remont (**43,3%** default rate).
 * **Brakujące dane to czerwona flaga:** Wnioski bez podanego stażu pracy (`NULL`) to ogromne ryzyko – aż **31,5%** z nich kończy się windykacją.
 * **Kredyty studenckie:** W grupie 18-26 lat pożyczki na edukację są w głównej mierze niespłacane przez osoby wynajmujące (`RENT`), stanowią one blisko **25%** wszystkich niespłaconych kredytów. Pokazuje to trudność finansową z jaką spotykają się młodzi dorośli, którzy studiują.
+
+## Etap 2: Czyszczenie danych w języku Python (Pandas)
+Po zdiagnozowaniu problemów w języku SQL, przeprowadzono proces oczyszczania danych w środowisku Python, przygotowując dane pod modelowanie oraz dashboarding.
+
+**1. Ekstrakcja z bazy danych:**
+- Nawiązano komunikację z baza danych PostgreSQL przy użyciu silnika `SQLAlchemy`.
+
+**2. Profilowanie i transformacja danych:**
+- **Filtrowanie wartości absurdalnych:** Zneutralizowano ludzkie błędy wejścia, takie jak klienci w wieku 144 lat lub posiadający 123 lata stażu pracy. Ograniczono zbiór do logicznych wartości (wiek do 90 lat, staż pracy do 50 lat).
+- **Imputacja braków danych:**
+  - `person_emp_length` (Staż pracy): Brakujące **895** rekordów wypełniono medianą.
+  - `loan_int_rate` (Oprocentowanie): Ze względu na **3116** braków, użyto imputacji warunkowej. Braki uzupełniono medianą oprocentowania grupowaną po klasie kredytowej (Loan Grade). Dzięki temu zachowano kluczową zależność: gorsi klienci (np. klasa F) otrzymali wyższe oprocentowanie niż klienci z klasy A.
+
+**3. Eksport:**
+Oczyszczony i spójny zbiór został wyeksportowany do formatu CSV (`credit_risk_dataset_cleaned.csv`).
