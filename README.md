@@ -7,7 +7,7 @@ Dane pochodzą z serwisu Kaggle (*Credit Risk Dataset*) i zawierają historyczne
 
 ## Wykorzystane Technologie
 * **Baza danych:** PostgreSQL (DBeaver)
-* **Języki:** SQL, Python, (Power BI, Excel Power Query) - w planach
+* **Języki:** SQL, Python (Pandas, Matplotlib, Seaborn), (Power BI, Excel Power Query) - w planach
 
 ## Struktura Repozytorium (Stan Obecny)
 ```text
@@ -19,7 +19,8 @@ credit-risk-analysis/
 │        └── credit_risk_dataset_cleaned.csv  # Oczyszczone dane     
 ├── dashboard/
 ├── notebooks/
-│   └── 01_data_cleaning.ipynb                # Oczyszczanie zbioru danych z błedów
+│   ├── 01_data_cleaning.ipynb                # Oczyszczanie zbioru danych z błedów
+│   └── 02_data_exploration.ipynb             # Eksploracyjna analiza danych i wizualizacja
 ├── sql/
 │   ├── 01_create_tables.sql                  # Skrypt tworzący schemat bazy danych
 │   └── 02_analysis_queries.sql               # Zapytania analityczne
@@ -65,3 +66,24 @@ Po zdiagnozowaniu problemów w języku SQL, przeprowadzono proces oczyszczania d
 
 **3. Eksport:**
 Oczyszczony i spójny zbiór został wyeksportowany do formatu CSV (`credit_risk_dataset_cleaned.csv`).
+
+## Etap 3: Eksploracyjna Analiza Danych (EDA) i Wizualizacja w Pythonie
+
+Kolejnym etapem projektu była eksploracyjna analiza danych oczyszczonego zbioru, przeprowadzona w języku Python (`Pandas`, `Matplotlib`, `Seaborn`). 
+
+> **Pełny kod, wykresy oraz analiza wszystkich zmiennych znajdują się w notatniku [`notebooks/02_data_exploration.ipynb`]**
+
+### Kluczowe Wnioski i Obserwacje z Analizy:
+
+1. **Struktura i Nierównowaga Portfela:**
+   * **78,2%** pożyczkobiorców spłaciło kredyt, a **21,8%** stanowią kredyty niespłacone.
+
+2. **Wskaźnik DTI (Debt-to-Income) jako Główny Indykator Ryzyka:**
+   * Osoby, które nie spłaciły kredytu, przeznaczały na niego średnio **24,7%** swojego dochodu (wobec **14,9%** w grupie spłacającej).
+   * Po przekroczeniu progu **20–25%** udziału kredytu w dochodzie drastycznie rośnie odsetek pożyczek niespłaconych.
+
+3. **Wpływ Statusu Mieszkaniowego i Historii Kredytowej:**
+   * Najwyższy wskaźnik niewypłacalności występuje wśród osób wynajmujących mieszkanie (`RENT`) oraz posiadających wcześniejszy wpis w rejestrze bankruptwa (`cb_person_default_on_file = Y`).
+
+4. **Korelacja Oprocentowania i Klasy Ryzyka (`loan_grade`):**
+   * Wyższa stopa procentowa przypisana do gorszych klas ryzyka dodatkowo obciąża budżet domowy klienta, potęgując zjawisko niewypłacalności.
