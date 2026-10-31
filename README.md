@@ -7,7 +7,7 @@ Dane pochodzą z serwisu Kaggle (*Credit Risk Dataset*) i zawierają historyczne
 
 ## Wykorzystane Technologie
 * **Baza danych:** PostgreSQL (DBeaver)
-* **Języki:** SQL, Python (Pandas, Matplotlib, Seaborn), (Power BI, Excel Power Query) - w planach
+* **Języki:** SQL, Python (Pandas, Matplotlib, Seaborn), Power BI, Excel Power Query
 
 ## Struktura Repozytorium (Stan Obecny)
 ```text
