@@ -18,12 +18,14 @@ credit-risk-analysis/
 │   └── przetworzone_dane/
 │        └── credit_risk_dataset_cleaned.csv  # Oczyszczone dane     
 ├── dashboard/
+│   └── credit_risk_dashboard.pbix            # Dashboard wykonany w Power BI  
 ├── notebooks/
 │   ├── 01_data_cleaning.ipynb                # Oczyszczanie zbioru danych z błedów
 │   └── 02_data_exploration.ipynb             # Eksploracyjna analiza danych i wizualizacja
 ├── sql/
 │   ├── 01_create_tables.sql                  # Skrypt tworzący schemat bazy danych
 │   └── 02_analysis_queries.sql               # Zapytania analityczne
+├── images/
 ├── .env                           
 ├── .gitignore
 ├── requirements.txt               
@@ -87,3 +89,19 @@ Kolejnym etapem projektu była eksploracyjna analiza danych oczyszczonego zbioru
 
 4. **Korelacja Oprocentowania i Klasy Ryzyka (`loan_grade`):**
    * Wyższa stopa procentowa przypisana do gorszych klas ryzyka dodatkowo obciąża budżet domowy klienta, potęgując zjawisko niewypłacalności.
+
+## Etap 4: Dashboard w Power BI
+
+Ostatnim etapem projektu było zbudowanie interaktywnego pulpitu nawigacyjnego, który pozwala kadrze zarządzającej na szybki przegląd kondycji portfela pożyczkowego oraz identyfikację najbardziej ryzykownych segmentów.
+
+![Pulpit Ryzyka Kredytowego](images/dashboard.png)
+
+### Kluczowe wnioski z wizualizacji:
+  - **Globalne KPI:** Portfel obejmuje 32 573 kredyty na łączną sumę 312,31 mln, przy czym ogólny wskaźnik niewypłacalności kształtuje się na poziomie 21,82%. Stosunek kredytów spłaconych (25 466) do niespłaconych (7 107) obrazuje ogólną skalę ryzyka.
+  - **Skuteczność klasyfikacji ryzyka (Loan Grades):** Wykres "Suma portfela pożyczek a poziom ryzyka według klas kredytowych" potwierdza, że system ocen działa poprawnie. Największy kapitał bank ulokował w bezpiecznych klasach A (92 mln) i B (104 mln). W klasach od E do G wolumen pożyczek drastycznie spada, ale wskaźnik niewypłacalności rośnie niemal do 100%.
+  - **Ryzykowne cele pożyczkowe:** Wbrew równemu obciążeniu budżetu (wskaźnik DTI oscyluje wokół 16-17% dla wszystkich celów), to konsolidacja długu (28,59% default rate) oraz pożyczki medyczne (26,71%) generują najwyższe ryzyko braku spłaty.
+  - **Struktura statusu mieszkaniowego:** Klienci wynajmujący mieszkania stanowią ponad połowę całego portfela (50,47% - ponad 16 tys. klientów), co bezpośrednio wpływa na globalny odsetek niespłaconych pożyczek.
+  - **Zjawisko "spirali zadłużenia"**: Wyizolowanie klientów z wcześniejszą historią niewypłacalności ukazuje drastyczny wzrost ryzyka. Wskaźnik niewypłacalności dla tej grupy wynosi aż 37,80% (wobec 21,82% dla całego portfela). Największym zagrożeniem jest w tym segmencie cel "Konsolidacja długu" - ponad połowa, bo aż 54,44% takich pożyczek, pozostaje niespłacona. Dowodzi to, że próba regulowania starych zobowiązań nowym kredytem jest w przypadku tych klientów skrajnie ryzykowna. System oceny ryzyka reaguje na to poprawnie, całkowicie wykluczając osoby z historią niewypłacalności z bezpiecznych klas A i B i przydzielając je wyłącznie do klas C-G.
+![Wpływ Wcześniejszego Bankuctwa](images/tak-historia-niewyplacalnosci.png)
+  - **Profil i ryzyko młodych dorosłych (20-25 lat)**: Zawężenie danych do najmłodszej grupy klientów ujawnia ogólny wskaźnik niewypłacalności na poziomie 23,02%. Ponad połowa młodych pożyczkobiorców (52,84%) wynajmuje mieszkanie. Kluczową anomalią biznesową jest tu cel "Remont domu" - w tej grupie wiekowej generuje on skrajnie wysokie ryzyko, sięgające aż 37,96% niespłaconych zobowiązań. Biorąc pod uwagę rzadkie posiadanie nieruchomości na własność przez osoby w wieku 20-25 lat (zaledwie 8,01% klientów w tej grupie to właściciele), wnioski o pożyczki remontowe w tym segmencie powinny być klasyfikowane jako wysoce ryzykowne.
+![Młodzi Dorośli a Kredyt](images/mlodzi-dorosli.png)
